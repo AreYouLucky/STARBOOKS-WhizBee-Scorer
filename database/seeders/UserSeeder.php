@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = [
+        $users = $users = [
             ['name' => 'Qwyncy Eva P. Turtoga', 'school' => 'Sto. Tomas National High School', 'address' => 'Davao del Norte, Santo Tomas'],
             ['name' => 'Luke Rhupert G. Lawas', 'school' => 'University of the Immaculate Conception', 'address' => 'Davao del Sur, City of Davao'],
             ['name' => 'RALPH ALEXANDER S. MAMON', 'school' => 'Compostela National High School', 'address' => 'Davao de Oro, Compostela'],
@@ -65,6 +65,7 @@ class UserSeeder extends Seeder
             ['name' => 'Khyrzstine Faith Saromines', 'school' => 'Mariano Peralta National High School', 'address' => 'Davao Occidental, Malita (Capital)'],
             ['name' => 'JIEAH JIEL C. CALAÑAS', 'school' => 'Montevista Stand Alone Senior High School', 'address' => 'Davao de Oro, Montevista'],
         ];
+           
         Student::insertOrIgnore($users);
     }
 }

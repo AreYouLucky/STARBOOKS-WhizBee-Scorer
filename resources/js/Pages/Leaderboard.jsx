@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@inertiajs/react";
-const socket = io("http://192.168.0.101:3001");
+const socket = io("http://192.168.40.43:3001");
 
 
 const Leaderboard = () => {
