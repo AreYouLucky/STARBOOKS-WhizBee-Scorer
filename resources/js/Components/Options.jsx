@@ -17,7 +17,7 @@ const Options = ({
                 name={name}
                 value={value}
                 onChange={onChange}
-                className="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 pr-8 max-w-[130px] w-full appearance-none"
+                className="w-full min-w-36 appearance-none rounded-xl border border-slate-200 bg-white px-4 py-2.5 pr-9 text-sm font-bold text-slate-700 shadow-sm transition hover:border-cyan-300 focus:border-cyan-400 focus:ring-cyan-400"
                 autoFocus={isFocused}
             >
                 <option className="text-gray-400" value="">

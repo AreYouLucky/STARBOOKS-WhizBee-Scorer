@@ -1,10 +1,10 @@
 import Options from "@/Components/Options";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
-import { io } from "socket.io-client";
 import ApplicationLogo from "@/Components/ApplicationLogo";
-import { Link } from "@inertiajs/react";
-const socket = io("http://192.168.40.43:3001");
+import { Head, Link } from "@inertiajs/react";
+import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, CheckIcon, UsersIcon } from "@heroicons/react/24/outline";
+import { socket } from "@/socket";
 
 const score = () => {
     const [students, setStudents] = useState([]);
@@ -59,7 +59,7 @@ const score = () => {
             }
         });
         return () => socket.off("chat message");
-    }, [qNumber, mySocketId,isFinal ]);
+    }, [qNumber, mySocketId, isFinal]);
 
 
 
@@ -216,24 +216,24 @@ const score = () => {
         debounceRef.current = setTimeout(() => {
             setqNumber(value)
             if (isFinal == 0) {
-                if (number <= 10) {
+                if (value <= 10) {
                     setLevel(1)
                 }
-                else if (number > 10 && number <= 20) {
+                else if (value > 10 && value <= 20) {
                     setLevel(3)
                 }
-                else if (number > 20) {
+                else if (value > 20) {
                     setLevel(5)
                 }
             }
             else {
-                if (number <= 5) {
+                if (value <= 5) {
                     setLevel(1)
                 }
-                else if (number > 5 && number <= 10) {
+                else if (value > 5 && value <= 10) {
                     setLevel(3)
                 }
-                else if (number > 10) {
+                else if (value > 10) {
                     setLevel(5)
                 }
             }
@@ -241,91 +241,64 @@ const score = () => {
     };
 
     return (
-        <div className="min-h-screen bg-blue-50 p-6 relative">
-            {/* Header */}
-            <div className="w-full gap-4 mb-6 ">
-                <ApplicationLogo className="w-64 mx-auto" />
-                <h1 className="text-2xl font-bold text-gray-800 drop-shadow">
-                    Question No. {qNumber}
-                </h1>
-                <Link href="/dashboard">
-                    <div className="bg-blue-400 rounded-lg shadow-md px-4 py-2 w-fit text-white absolute md:top-4 md:left-4 top-1 left-1">
-                        Back
+        <div className="quiz-page px-4 py-5 sm:px-6 lg:px-8">
+            <Head title="Score contestants" />
+            <div className="relative z-10 mx-auto max-w-[1600px]">
+                <header className="mb-5 flex items-center justify-between gap-4">
+                    <Link href="/dashboard" className="inline-flex items-center gap-2 rounded-xl border border-white bg-white px-3 py-2 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-sky-50">
+                        <ArrowLeftIcon className="h-5 w-5" />
+                        <span className="hidden sm:inline">Dashboard</span>
+                    </Link>
+                    <ApplicationLogo className="w-44 sm:w-60" />
+                    <div className="flex min-w-10 items-center justify-end gap-2 text-slate-700">
+                        <UsersIcon className="h-5 w-5 text-sky-600" />
+                        <span className="hidden text-sm font-bold sm:inline">{checkedStudents.length} scored</span>
                     </div>
-                </Link>
-            </div>
+                </header>
 
-            {/* Controls */}
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-blue-400 border border-yellow-400 rounded-lg p-4 shadow-md mb-6">
-                <div className="flex flex-row gap-2">
-                    <Options
-                        id="difficulty"
-                        items={difficulties}
-                        itemValue="score"
-                        itemName="label"
-                        name="difficulty"
-                        value={level}
-                        onChange={handleDifficultyChange}
-                    />
-                    <Options
-                        id="stage"
-                        items={stages}
-                        itemValue="value"
-                        itemName="label"
-                        name="stage"
-                        value={isFinal}
-                        onChange={handleStageChange}
-                    />
-                </div>
-
-                <div className="flex items-center gap-2">
-                    <button
-                        type="button"
-                        className={`px-4 py-2 rounded font-semibold text-white transition ${qNumber > 1 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
-                        disabled={qNumber <= 1}
-                        onClick={() => navigateQuestion(0)}
-                    >
-                        Prev
-                    </button>
-
-                    <input
-                        type="text"
-                        placeholder="Jump to"
-                        onChange={jumpTo}
-                        className="w-24 sm:w-32 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    />
-
-                    <button
-                        type="button"
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold transition"
-                        onClick={() => navigateQuestion(1)}
-                    >
-                        Next
-                    </button>
-                </div>
-            </div>
-
-            {/* Student Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-10 gap-3">
-                {students.map((student, index) => {
-                    const isChecked = checkedStudents.includes(student.name);
-                    return (
-                        <div
-                            key={index}
-                            onClick={() => toggleStudentCheck(student.name)}
-                            className={`p-2 rounded-xl shadow-sm cursor-pointer transition transform hover:scale-105 flex justify-center items-center flex-col  ${isChecked
-                                ? 'bg-blue-500 text-white border-yellow-400 border-2'
-                                : 'bg-white text-gray-800 border-blue-300 hover:bg-gray-100 border'
-                                }`}
-                        >
-                            <div className={` font-bold text-3xl ${isChecked ? 'text-white' : 'text-blue-600'} `}>{student.id}</div>
-                            <p className="text-xs capitalize font-bold break-words whitespace-normal text-center">{student.name.toUpperCase()}</p>
+                <section className="quiz-panel overflow-hidden">
+                    <div className="grid gap-5 border-b border-slate-100 px-5 py-5 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-10 lg:py-5">
+                        <div>
+                            <p className="text-lg text-sky-500 font-extrabold tracking-widest uppercase sm:text-2xl">{isFinal === 1 ? 'Final round' : 'Semi-final round'}</p>
                         </div>
-                    );
-                })}
+                        <div className="rounded-2xl bg-sky-500 px-8 py-3 text-center text-white ">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-100">Question</p>
+                            <p className="text-4xl font-black leading-none">{qNumber}</p>
+                        </div>
+                        <div className="flex flex-wrap gap-2 lg:justify-end">
+                            <Options id="difficulty" items={difficulties} itemValue="score" itemName="label" name="difficulty" value={level} onChange={handleDifficultyChange} />
+                            <Options id="stage" items={stages} itemValue="value" itemName="label" name="stage" value={isFinal} onChange={handleStageChange} />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-5 p-5 sm:grid-cols-3 sm:px-10 pb-10 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-5">
+                        {students.map((student) => {
+                            const isChecked = checkedStudents.includes(student.name);
+                            return (
+                                <button key={student.id} type="button" onClick={() => toggleStudentCheck(student.name)} className={`group relative flex min-h-28 flex-col items-center justify-center overflow-hidden rounded-2xl border p-3 text-center transition duration-200 hover:-translate-y-0.5 hover:shadow-lg ${isChecked ? 'border-blue-500 bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-md shadow-blue-500/20' : 'border-sky-400 bg-white text-slate-800 hover:border-cyan-300'}`}>
+                                    {isChecked && <span className="absolute right-2 top-2 rounded-full bg-amber-300 p-1 text-slate-900"><CheckIcon className="h-3.5 w-3.5 stroke-[3]" /></span>}
+                                    <span className={`text-3xl font-black ${isChecked ? 'text-white' : 'text-sky-500'}`}>{student.id}</span>
+                                    <span className={`mt-1 line-clamp-2 text-[11px] font-extrabold uppercase leading-4 ${isChecked ? 'text-blue-50' : 'text-slate-600'}`}>{student.name}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    <div className="flex flex-col gap-3 bg-slate-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-10 lg:py-5">
+                        <p className="text-sm font-medium text-slate-500">Tap a contestant to mark a correct answer.</p>
+                        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2">
+                            <button type="button" className={`inline-flex items-center gap-1 rounded-xl px-3 py-2.5 text-sm font-bold transition ${qNumber > 1 ? 'bg-white text-slate-700 shadow-sm ring-1 ring-slate-200 hover:bg-slate-100' : 'cursor-not-allowed bg-slate-200 text-slate-400'}`} disabled={qNumber <= 1} onClick={() => navigateQuestion(0)}>
+                                <ChevronLeftIcon className="h-4 w-4" /> Prev
+                            </button>
+                            <input type="number" min="1" placeholder="Jump to" onChange={jumpTo} className="min-w-0 rounded-xl border-slate-200 bg-white px-3 py-2 text-center text-sm font-bold focus:border-cyan-400 focus:ring-cyan-400" />
+                            <button type="button" className="inline-flex items-center gap-1 rounded-xl bg-slate-900 px-3 py-2.5 text-sm font-bold text-white transition hover:bg-blue-600" onClick={() => navigateQuestion(1)}>
+                                Next <ChevronRightIcon className="h-4 w-4" />
+                            </button>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
-
     );
 };
 

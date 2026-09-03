@@ -20,7 +20,7 @@ export default forwardRef(function TextInput(
         <input
             {...props}
             type={type}
-            className={`bg-gray-50 border border-gray-800 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ${
+            className={`block w-full rounded-xl border border-sky-300 bg-transparent px-4 py-3 text-sm text-slate-900 placeholder:text-slate-300 focus:border-cyan-400 focus:bg-white focus:ring-cyan-400 ${
                 props.disabled ? "bg-slate-400 text-gray-500  cursor-not-allowed" : ""
             } ${className}`}
             ref={localRef}

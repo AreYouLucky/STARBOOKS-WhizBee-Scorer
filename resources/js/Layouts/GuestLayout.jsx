@@ -1,13 +1,13 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
-import { Link } from '@inertiajs/react';
 
 export default function Guest({ children }) {
     return (
-        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-blue-200">
-
-            <div className="w-full sm:max-w-md mt-6 px-10 py-16 bg-white shadow-md overflow-hidden rounded-xl">
-                <div className='w-full'>
-                    <ApplicationLogo className="w-60 fill-current text-gray-500 mx-auto" />
+        <div className="quiz-page flex items-center justify-center px-4 py-8">
+            <div className="quiz-panel relative z-10 w-full max-w-md overflow-hidden px-6 py-8 sm:px-10 sm:py-24">
+                <div className="mb-8 text-center">
+                    <div className="mx-auto inline-flex rounded-2xl px-5">
+                        <ApplicationLogo className="w-56" />
+                    </div>
                 </div>
                 {children}
             </div>
