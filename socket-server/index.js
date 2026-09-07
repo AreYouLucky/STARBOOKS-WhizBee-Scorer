@@ -1,7 +1,7 @@
 const http = require("http");
 const { Server } = require("socket.io");
 
-const socketUrlValue = process.env.VITE_SOCKET_URL || "http://192.168.1.31:3001";
+const socketUrlValue = process.env.VITE_SOCKET_URL || "http://192.168.0.11:3001";
 const socketUrl = new URL(socketUrlValue);
 const HOST = process.env.SOCKET_HOST || socketUrl.hostname;
 const PORT = Number(process.env.SOCKET_PORT || socketUrl.port || 3001);
