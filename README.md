@@ -1,5 +1,9 @@
 # STARBOOKS WhizBee Scorer
 
+# if built and deployed just do:
+
+`npm socket run` and `php artisan serve --host 0.0.0.0 --port 8080`
+
 STARBOOKS WhizBee Scorer is a real-time quiz scoring and leaderboard application. It uses Laravel and MySQL for the application and data layer, React with Inertia.js for the interface, and Socket.IO for live score updates between connected screens.
 
 ## Technology stack
@@ -194,7 +198,7 @@ http://127.0.0.1:3001/health
 A healthy server returns:
 
 ```json
-{"status":"ok"}
+{ "status": "ok" }
 ```
 
 Expected terminal output:
