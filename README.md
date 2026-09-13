@@ -1,66 +1,287 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# STARBOOKS WhizBee Scorer
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+STARBOOKS WhizBee Scorer is a real-time quiz scoring and leaderboard application. It uses Laravel and MySQL for the application and data layer, React with Inertia.js for the interface, and Socket.IO for live score updates between connected screens.
 
-## About Laravel
+## Technology stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.1 or newer
+- Laravel 10
+- MySQL or MariaDB
+- React 18 and Inertia.js
+- Vite 5
+- Node.js 20.6 or newer
+- Socket.IO 4
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Install the following before setting up the project:
 
-## Learning Laravel
+- [PHP](https://www.php.net/) 8.1+
+- [Composer](https://getcomposer.org/)
+- [Node.js](https://nodejs.org/) 20.6+
+- MySQL 8+ or a compatible MariaDB version
+- Git
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+The Socket.IO startup script uses Node's `--env-file` option, so Node.js 20.6 or newer is required.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Installation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Get the source code
 
-## Laravel Sponsors
+```bash
+git clone <repository-url>
+cd STARBOOKS-WhizBee-Scorer
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+If the project is already on your computer, open a terminal in its root directory instead.
 
-### Premium Partners
+### 2. Install PHP dependencies
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```bash
+composer install
+```
 
-## Contributing
+### 3. Install frontend and Socket.IO dependencies
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+npm install
+npm install --prefix socket-server
+```
 
-## Code of Conduct
+If PowerShell reports that `npm.ps1` cannot be loaded because script execution is disabled, use `npm.cmd`:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```powershell
+npm.cmd install
+npm.cmd install --prefix socket-server
+```
 
-## Security Vulnerabilities
+### 4. Create the environment file
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+macOS or Linux:
+
+```bash
+cp .env.example .env
+```
+
+Generate the Laravel application key:
+
+```bash
+php artisan key:generate
+```
+
+### 5. Configure MySQL
+
+Create an empty database, for example:
+
+```sql
+CREATE DATABASE starbooks_whizbee;
+```
+
+Update the database section in `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=starbooks_whizbee
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Use the username and password for your local MySQL installation.
+
+### 6. Configure Socket.IO
+
+For development on one computer, use:
+
+```env
+APP_URL=http://127.0.0.1:8000
+VITE_SOCKET_URL=http://127.0.0.1:3001
+SOCKET_HOST=127.0.0.1
+SOCKET_PORT=3001
+SOCKET_CORS_ORIGIN=*
+```
+
+For access from other computers on the same network, replace `192.168.1.24` below with the server computer's current IPv4 address:
+
+```env
+APP_URL=http://192.168.1.24:8000
+VITE_SOCKET_URL=http://192.168.1.24:3001
+SOCKET_HOST=0.0.0.0
+SOCKET_PORT=3001
+SOCKET_CORS_ORIGIN=*
+```
+
+On Windows, find the current address with:
+
+```powershell
+ipconfig
+```
+
+Look for `IPv4 Address` under the active network adapter. For production, replace the wildcard CORS setting with the exact trusted application origin.
+
+### 7. Create and seed the database
+
+```bash
+php artisan migrate --seed
+```
+
+This creates the required tables, initial event state, participant data, and the default administrator account.
+
+Default seeded login:
+
+```text
+Username: starbooks
+Password: Starbooks@2025
+```
+
+Change this password before using the application in a public or production environment.
+
+## Startup
+
+The development environment requires three running processes. Open three terminals in the project root directory.
+
+### Terminal 1: Laravel application
+
+```bash
+php artisan serve
+```
+
+### Terminal 2: Vite frontend
+
+```bash
+npm run dev
+```
+
+### Terminal 3: Socket.IO server
+
+```bash
+npm run socket
+```
+
+On a Windows system that blocks `npm.ps1`, use:
+
+```powershell
+npm.cmd run dev
+npm.cmd run socket
+```
+
+Open the application at [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+To make Laravel and Vite reachable by other devices on the local network, start them with:
+
+```bash
+php artisan serve --host=0.0.0.0 --port=8000
+npm run dev -- --host=0.0.0.0
+```
+
+Other devices can then open `http://<server-ip>:8000`. Make sure ports `8000` and `3001` are permitted through the server computer's firewall.
+
+## Verify the Socket.IO server
+
+After running `npm run socket`, open:
+
+```text
+http://127.0.0.1:3001/health
+```
+
+A healthy server returns:
+
+```json
+{"status":"ok"}
+```
+
+Expected terminal output:
+
+```text
+Socket.IO server running on http://127.0.0.1:3001
+Listening on 127.0.0.1:3001
+```
+
+## Production frontend build
+
+Create optimized frontend assets with:
+
+```bash
+npm run build
+```
+
+The Laravel application and Socket.IO server still need to run behind suitable production process managers and a web server. Set `APP_DEBUG=false`, use secure production credentials, restrict `SOCKET_CORS_ORIGIN`, and serve the application over HTTPS/WSS.
+
+## Useful commands
+
+```bash
+# Clear cached Laravel configuration after changing .env
+php artisan optimize:clear
+
+# Run Laravel tests
+php artisan test
+
+# Build frontend assets
+npm run build
+
+# Start only the Socket.IO server from the root directory
+npm run socket
+```
+
+## Troubleshooting
+
+### `EADDRNOTAVAIL` when starting Socket.IO
+
+The address in `VITE_SOCKET_URL` or `SOCKET_HOST` does not belong to this computer. For local-only use, set both hosts to `127.0.0.1`. For LAN use, set `VITE_SOCKET_URL` to the computer's current IPv4 address and `SOCKET_HOST=0.0.0.0`.
+
+### `EADDRINUSE` on port 3001
+
+Another process is already using the Socket.IO port. Stop the existing process or choose another port, updating both values:
+
+```env
+VITE_SOCKET_URL=http://127.0.0.1:3002
+SOCKET_PORT=3002
+```
+
+### The application loads but live updates do not work
+
+- Confirm that `npm run socket` is still running.
+- Check `http://127.0.0.1:3001/health`.
+- Confirm that `VITE_SOCKET_URL` is reachable from the browser's computer.
+- Restart Vite after changing any `VITE_` environment variable.
+- Check that the firewall permits the configured socket port.
+
+### Laravel reports a database connection error
+
+Confirm that MySQL is running, the database exists, and the `DB_*` values in `.env` are correct. Then clear cached configuration:
+
+```bash
+php artisan optimize:clear
+```
+
+## Main application pages
+
+- `/` — login
+- `/dashboard` — application dashboard
+- `/score` — scoring interface
+- `/leaderboards` — live leaderboard
+- `/finalist` — finalist management
+
+All pages except login require authentication.
+
+## Project structure
+
+```text
+app/                Laravel application code
+database/           Migrations and seeders
+resources/js/       React and Inertia.js interface
+routes/              Web and scoring routes
+socket-server/       Socket.IO server and dependencies
+package.json         Frontend and root startup scripts
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is built on the Laravel framework, which is licensed under the [MIT License](https://opensource.org/licenses/MIT).
