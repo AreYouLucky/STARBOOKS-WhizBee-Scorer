@@ -14,6 +14,6 @@ class ChatController extends Controller
             'message' => $message,
         ]);
 
-        return response()->json(['status' => 'Message sent']);
+        return response()->json(['status' => 'Message sent!']);
     }
 }
